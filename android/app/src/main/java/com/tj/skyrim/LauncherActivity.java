@@ -52,13 +52,13 @@ public class LauncherActivity extends Activity {
     private final Map<String, CheckBox> checks = new LinkedHashMap<>();
 
     /* option key -> labels, and the INI values each label stands for */
-    private static final String[] PRESETS = {"Low", "Medium", "High", "Ultra"};
+    private static final String[] PRESETS = {"低 (Low)", "中 (Medium)", "高 (High)", "极高 (Ultra)"};
     private static final String[] PRESET_FILES = {"low.ini", "medium.ini", "high.ini", "VeryHigh.ini"};
     private static final int[] MODE_HEIGHTS = {1080, 900, 720, 648, 576, 540, 480, 432, 360, 288, 270, 216, 180, 144, 108};
 
     // Aspect ratio of the picture. Very wide phones (20:9 and up) show the game
     // at 16:9 or so with black bars instead of stretching its UI to the edges.
-    private static final String[] ASPECTS = {"16:9", "16:10", "4:3", "21:9", "Screen"};
+    private static final String[] ASPECTS = {"16:9", "16:10", "4:3", "21:9", "屏幕铺满 (Screen)"};
     private static final int[][] ASPECT_V = {{16, 9}, {16, 10}, {4, 3}, {21, 9}, {0, 0}};
 
     private int[] screen() {
@@ -92,18 +92,18 @@ public class LauncherActivity extends Activity {
         for (int i = 0; i < m.length; i++) if (m[i][1] <= 540) return i;
         return m.length - 1;
     }
-    private static final String[] AA = {"Off", "2x", "4x", "8x"};
+    private static final String[] AA = {"关闭 (Off)", "2x", "4x", "8x"};
     private static final int[] AA_V = {1, 2, 4, 8};
-    private static final String[] ANISO = {"Off", "2x", "4x", "8x", "16x"};
+    private static final String[] ANISO = {"关闭 (Off)", "2x", "4x", "8x", "16x"};
     private static final int[] ANISO_V = {1, 2, 4, 8, 16};
-    private static final String[] TEXQ = {"Low", "Medium", "High"};
+    private static final String[] TEXQ = {"低 (Low)", "中 (Medium)", "高 (High)"};
     private static final int[] TEXQ_V = {2, 1, 0};  // iTexMipMapSkip
-    private static final String[] SHADOW = {"Low", "Medium", "High", "Ultra"};
+    private static final String[] SHADOW = {"低 (Low)", "中 (Medium)", "高 (High)", "极高 (Ultra)"};
     private static final int[] SHADOW_V = {512, 1024, 2048, 4096};
-    private static final String[] DECALS = {"None", "Low", "Medium", "High"};
+    private static final String[] DECALS = {"关闭 (None)", "低 (Low)", "中 (Medium)", "高 (High)"};
     private static final int[] DECALS_V = {0, 100, 250, 1000};
-    private static final String[] BLUR = {"Low", "Medium", "High"};
-    private static final String[] FADE = {"Short", "Medium", "Far", "Very far"};
+    private static final String[] BLUR = {"低 (Low)", "中 (Medium)", "高 (High)"};
+    private static final String[] FADE = {"近 (Short)", "中 (Medium)", "远 (Far)", "极远 (Very far)"};
     private static final String[] FADE_V = {"2.5", "4.5", "6.5", "9.0"};
 
     @Override
@@ -174,13 +174,13 @@ public class LauncherActivity extends Activity {
         root.setPadding(dp(24), dp(16), dp(24), dp(24));
         sv.addView(root);
 
-        text(root, "Skyrim", 28, true);
+        text(root, "上古卷轴5：天际 (Skyrim)", 28, true);
 
-        text(root, "Game folder", 20, true);
+        text(root, "游戏文件目录", 20, true);
         folderText = text(root, "", 14, false);
         folderStatus = text(root, "", 14, false);
         Button pick = new Button(this);
-        pick.setText("Choose Skyrim folder");
+        pick.setText("选择天际游戏目录");
         pick.setOnClickListener(v -> {
             /* the game reads the folder with plain file calls: ask for file
              * access first (only shown once), then pick */
@@ -189,11 +189,11 @@ public class LauncherActivity extends Activity {
         });
         root.addView(pick);
 
-        text(root, "Options", 20, true);
-        Spinner preset = spinner(root, "preset", "Detail", PRESETS, 0);
-        Spinner aspect = spinner(root, "aspect", "Aspect ratio", ASPECTS, 0);
+        text(root, "图形设置", 20, true);
+        Spinner preset = spinner(root, "preset", "画质预设", PRESETS, 0);
+        Spinner aspect = spinner(root, "aspect", "画面比例", ASPECTS, 0);
         int[][] m = modes(aspect.getSelectedItemPosition());
-        Spinner res = spinner(root, "res", "Resolution", modeNames(m), defaultMode(m));
+        Spinner res = spinner(root, "res", "渲染分辨率", modeNames(m), defaultMode(m));
         aspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             boolean first = true;
             @Override public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
@@ -213,17 +213,17 @@ public class LauncherActivity extends Activity {
             @Override public void onNothingSelected(AdapterView<?> p) {}
         });
         prefs.edit().putInt("aspectShown", aspect.getSelectedItemPosition()).apply();
-        spinner(root, "aa", "Antialiasing", AA, 0);
-        spinner(root, "aniso", "Anisotropic filtering", ANISO, 0);
-        spinner(root, "texq", "Texture quality", TEXQ, 1);
-        spinner(root, "shadow", "Shadow detail", SHADOW, 0);
-        spinner(root, "decals", "Decal quantity", DECALS, 0);
-        spinner(root, "blur", "Radial blur quality", BLUR, 0);
-        spinner(root, "fade", "Object fade distance", FADE, 0);
-        check(root, "fxaa", "FXAA", false);
-        check(root, "vsync", "Vertical sync", true);
-        check(root, "touch", "Touch controls", true);
-        check(root, "nintendo", "Nintendo button layout (A/B, X/Y swapped)", false);
+        spinner(root, "aa", "抗锯齿 (AA)", AA, 0);
+        spinner(root, "aniso", "各向异性过滤 (AF)", ANISO, 0);
+        spinner(root, "texq", "贴图质量", TEXQ, 1);
+        spinner(root, "shadow", "阴影细节", SHADOW, 0);
+        spinner(root, "decals", "贴花印记数量", DECALS, 0);
+        spinner(root, "blur", "径向模糊质量", BLUR, 0);
+        spinner(root, "fade", "物体视距 (Fade)", FADE, 0);
+        check(root, "fxaa", "快速近似抗锯齿 (FXAA)", false);
+        check(root, "vsync", "垂直同步 (V-Sync)", true);
+        check(root, "touch", "启用屏幕虚拟按键", true);
+        check(root, "nintendo", "任天堂键位布局（交换 A/B、X/Y）", false);
         preset.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             boolean first = true;
             @Override public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
@@ -234,7 +234,7 @@ public class LauncherActivity extends Activity {
         });
 
         playButton = new Button(this);
-        playButton.setText("Play");
+        playButton.setText("开始游戏 (Play)");
         playButton.setTextSize(22);
         playButton.setOnClickListener(v -> play());
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(64));
@@ -314,7 +314,7 @@ public class LauncherActivity extends Activity {
         if (req != REQ_FOLDER || res != RESULT_OK || data == null || data.getData() == null) return;
         String path = treeToPath(data.getData());
         if (path == null) {
-            folderStatus.setText("That location is not a plain folder on this device; choose one on internal storage or the SD card.");
+            folderStatus.setText("该路径在此设备上不是常规文件夹，请选择内部存储或 SD 卡上的目录。");
             return;
         }
         prefs.edit().putString("folder", path).apply();
@@ -351,9 +351,9 @@ public class LauncherActivity extends Activity {
 
     private void checkSha(File f, String want, String name, List<String> bad) {
         String got = sha1(f);
-        if (got == null) bad.add("cannot read " + name);
-        else if (!got.equals(want)) bad.add(name + " is the wrong version (SHA-1 " + got.substring(0, 8)
-                + ", expected " + want.substring(0, 8) + ")");
+        if (got == null) bad.add("无法读取 " + name);
+        else if (!got.equals(want)) bad.add(name + " 版本不符合 (SHA-1: " + got.substring(0, 8)
+                + "，预期: " + want.substring(0, 8) + ")");
     }
 
     /* SHA-1 as hex, cached by path, size and modification time; null if unreadable. */
@@ -378,30 +378,30 @@ public class LauncherActivity extends Activity {
     /* Returns the list of problems with the folder (empty when it is ready). */
     private List<String> checkFolder(String path) {
         List<String> bad = new ArrayList<>();
-        if (path == null) { bad.add("no folder chosen"); return bad; }
+        if (path == null) { bad.add("未选择游戏目录"); return bad; }
         File d = new File(path);
-        if (!d.isDirectory()) { bad.add("folder not found"); return bad; }
+        if (!d.isDirectory()) { bad.add("未找到该目录"); return bad; }
         File data = findCi(d, "Data");
         File esm = data != null ? findCi(data, "Skyrim.esm") : null;
-        if (data == null) bad.add("Data folder missing");
-        else if (esm == null) bad.add(data.canRead() ? "Data/Skyrim.esm missing" : "cannot read the Data folder");
-        else if (!esm.canRead()) bad.add("cannot read Data/Skyrim.esm");
+        if (data == null) bad.add("缺少 Data 文件夹");
+        else if (esm == null) bad.add(data.canRead() ? "缺少 Data/Skyrim.esm" : "无法读取 Data 文件夹");
+        else if (!esm.canRead()) bad.add("无法读取 Data/Skyrim.esm");
         // Only the original exe is checked: Steamless output differs between Steamless versions.
         File packed = findCi(d, "TESV.exe");
         if (packed != null) checkSha(packed, SHA_TESV_STEAM, "TESV.exe", bad);
         if (findCi(d, "TESV_unpacked.exe") == null && findCi(d, "TESV.exe.unpacked.exe") == null)
-            bad.add(packed != null ? "TESV_unpacked.exe missing (unpack TESV.exe with Steamless)" : "TESV_unpacked.exe missing");
+            bad.add(packed != null ? "缺少 TESV_unpacked.exe（请使用 Steamless 解密 TESV.exe）" : "缺少 TESV_unpacked.exe");
         for (String n : new String[] {"d3dx9_42.dll", "X3DAudio1_7.dll", "binkw32.dll"})
-            if (findCi(d, n) == null) bad.add(n + " missing");
+            if (findCi(d, n) == null) bad.add("缺少 " + n);
         return bad;
     }
 
     private void refreshFolder() {
         String path = prefs.getString("folder", null);
-        folderText.setText(path == null ? "No folder chosen yet. Copy your Skyrim folder (with the 3 extra files) "
-                + "anywhere outside Android/data, e.g. Internal storage/Skyrim, then choose it here." : path);
+        folderText.setText(path == null ? "尚未选择游戏目录。请将你的 PC 版天际游戏文件夹（包含 3 个额外的 DLL 库文件）"
+                + "复制到 Android/data 以外的位置（例如：内部存储/Skyrim），然后在此选择。" : path);
         List<String> bad = checkFolder(path);
-        folderStatus.setText(bad.isEmpty() ? "Ready" : "Not ready: " + String.join(", ", bad));
+        folderStatus.setText(bad.isEmpty() ? "就绪 (Ready)" : "未就绪: " + String.join("，", bad));
         folderStatus.setTextColor(bad.isEmpty() ? Color.rgb(140, 200, 120) : Color.rgb(230, 150, 110));
         playButton.setEnabled(bad.isEmpty());
     }
@@ -433,7 +433,7 @@ public class LauncherActivity extends Activity {
                 w.write((checks.get("touch").isChecked() ? "1" : "0") + " " + (checks.get("nintendo").isChecked() ? "1" : "0") + "\n");
             }
         } catch (Exception ex) {
-            folderStatus.setText("Could not write the settings: " + ex);
+            folderStatus.setText("无法保存配置设置: " + ex);
             return;
         }
         Intent i = new Intent(this, SkyrimActivity.class);
